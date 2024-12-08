@@ -4,6 +4,7 @@ import com.kaab.dto.Customer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.annotation.TopicPartition;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -11,11 +12,20 @@ public class KafkaMessageListener {
 
     Logger logger = LoggerFactory.getLogger(KafkaMessageListener.class);
 
-    @KafkaListener(topics = "kaab-topic-class",groupId = "kaab-topic-class")
-    public void consumeCustomer(Customer customer){
-        logger.info("Consumer consume the event {}",customer.toString());
+
+    @KafkaListener(topics = "kaab-topic-specific-partition",groupId = "kaab-topic-specific-partition",
+                    topicPartitions = {@TopicPartition(topic = "kaab-topic-specific-partition",partitions = {"3"})})
+    public void consume1(String message){
+        logger.info("Consumer  consume the message {}",message);
 
     }
+
+
+//    @KafkaListener(topics = "kaab-topic-class",groupId = "kaab-topic-class")
+//    public void consumeCustomer(Customer customer){
+//        logger.info("Consumer consume the event {}",customer.toString());
+//
+//    }
 
 //    @KafkaListener(topics = "kaab-topic-2",groupId = "kaab-group-2")
 //    public void consume1(String message){
